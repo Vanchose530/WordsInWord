@@ -7,6 +7,7 @@ public class SubWord : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField] private TextMeshProUGUI subWordTMP;
+    [SerializeField] private GameObject checkButton;
 
     public string word { get; private set; }
 
@@ -19,6 +20,7 @@ public class SubWord : MonoBehaviour
     {
         word += letter;
         UpdateTMP();
+        CheckForCanSubmit();
     }
 
     public void RemoveLetter(char letter)
@@ -28,7 +30,10 @@ public class SubWord : MonoBehaviour
             if (word[i] == letter)
             {
                 word = word.Remove(i, 1);
+
                 UpdateTMP();
+                CheckForCanSubmit();
+
                 return;
             }
         }
@@ -39,10 +44,17 @@ public class SubWord : MonoBehaviour
     {
         word = "";
         UpdateTMP();
+        CheckForCanSubmit();
     }
 
     private void UpdateTMP()
     {
         subWordTMP.text = word.ToUpper();
+    }
+
+    private void CheckForCanSubmit()
+    {
+        if (checkButton != null)
+            checkButton.SetActive(subWordTMP.text.Length > 1);
     }
 }

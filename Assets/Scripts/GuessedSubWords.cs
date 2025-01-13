@@ -6,21 +6,11 @@ using UnityEngine;
 public class GuessedSubWords : MonoBehaviour
 {
     [Header("Setup")]
-    [SerializeField] private TextMeshProUGUI wordsTMP;
+    [SerializeField] private GuessedWord guessedWordPrefab;
 
-    private void Start()
+    public void AddNewWord(string word)
     {
-        wordsTMP.text = "";
-    }
-
-    public void DisplayWords(List<string> words)
-    {
-        wordsTMP.text = "";
-
-        foreach (string word in words)
-        {
-            wordsTMP.text += word.ToUpper();
-            wordsTMP.text += "\n";
-        }
+        var gw = Instantiate(guessedWordPrefab, this.transform);
+        gw.word = word;
     }
 }
