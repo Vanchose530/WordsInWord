@@ -5,7 +5,9 @@ using UnityEngine;
 public class MainWord : MonoBehaviour
 {
     [Header("Setup")]
-    [SerializeField] private List<LetterButton> letterButtons;
+    [SerializeField] private LetterButton letterButtonPrefab;
+
+    private List<LetterButton> letterButtons = new List<LetterButton>();
 
     public void ClearLetterButtons()
     {
@@ -13,5 +15,29 @@ public class MainWord : MonoBehaviour
         {
             button.Clear();
         }
+    }
+
+    public void BuildWord(string word)
+    {
+        foreach(char letter in word/*.ToUpper()*/)
+        {
+            AddLetterButton(letter);
+        }
+    }
+
+    void AddLetterButton(char letter)
+    {
+        var lb = Instantiate(letterButtonPrefab, this.transform);
+        lb.letter = letter;
+        letterButtons.Add(lb);
+    }
+
+    public void ClearWord()
+    {
+        foreach(LetterButton button in letterButtons)
+        {
+            Destroy(button);
+        }
+        letterButtons.Clear();
     }
 }

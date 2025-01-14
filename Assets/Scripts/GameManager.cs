@@ -37,9 +37,14 @@ public class GameManager : MonoBehaviour
         UpdateWordsRemainUI();
     }
 
+    private void Start()
+    {
+        SetupGame();
+    }
+
     void SetupGame()
     {
-
+        mainWord.BuildWord(word);
     }
 
     void AddNewGuessedWord(string word)

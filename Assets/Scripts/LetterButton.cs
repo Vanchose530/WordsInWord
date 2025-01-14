@@ -6,7 +6,7 @@ using UnityEngine;
 public class LetterButton : MonoBehaviour
 {
     [Header("Letter")]
-    [SerializeField] private char letter = 'A';
+    public char letter = 'A';
 
     [Header("Setup")]
     [SerializeField] private TextMeshProUGUI letterTMP;
