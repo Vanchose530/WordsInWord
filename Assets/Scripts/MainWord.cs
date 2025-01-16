@@ -17,8 +17,9 @@ public class MainWord : MonoBehaviour
         }
     }
 
-    public void BuildWord(string word)
+    public void BuildNewWord(string word)
     {
+        ClearWord();
         foreach(char letter in word/*.ToUpper()*/)
         {
             AddLetterButton(letter);
@@ -36,7 +37,7 @@ public class MainWord : MonoBehaviour
     {
         foreach(LetterButton button in letterButtons)
         {
-            Destroy(button);
+            Destroy(button.gameObject);
         }
         letterButtons.Clear();
     }

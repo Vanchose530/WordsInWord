@@ -15,16 +15,19 @@ public class GameManager : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private SubWord _subWord;
     public SubWord subWord { get { return _subWord; } }
+
     [SerializeField] private MainWord _mainWord;
     public MainWord mainWord { get { return _mainWord; } }
+
     [SerializeField] private GuessedSubWords _guessedSubWords;
     public GuessedSubWords guessedSubWords { get { return _guessedSubWords; } }
-    [SerializeField] private TextMeshProUGUI wordsRemainTMP;
+
+    [SerializeField] private LevelController _levelController;
+    public LevelController levelController { get { return _levelController; } }
+
+    [SerializeField] private HeaderPanel headerPanel;
 
     public int wordsRemain { get { return allSubWords.Count - guessedSubWordsList.Count; } }
-
-    const string WORDS_REMAIN_STRING = "Осталось слов: ";
-    const string ALL_WORDS_GUESSED_STRING = "Все слова отгаданы!";
 
     private void Awake()
     {
@@ -34,36 +37,40 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Find more than one GameManager script in scene!");
 
         guessedSubWordsList = new List<string>();
-        UpdateWordsRemainUI();
     }
 
     private void Start()
     {
-        SetupGame();
+        SetupLevel(levelController.Concrete(1));
+
+        // levelController.levelDataHandler.GenerateLevelTemplate();
     }
 
-    void SetupGame()
+    public void ToNextLevel()
     {
-        mainWord.BuildWord(word);
+        SetupLevel(levelController.Next());
+    }
+
+    public void ToPreviousLevel()
+    {
+        SetupLevel(levelController.Previous());
+    }
+
+    void SetupLevel(Level level)
+    {
+        mainWord.BuildNewWord(level.word);
+        allSubWords = level.subwords;
+        guessedSubWordsList.Clear();
+
+        headerPanel.SetWordsRemain(wordsRemain);
+        headerPanel.SetLevel(levelController.currentLevel);
     }
 
     void AddNewGuessedWord(string word)
     {
         guessedSubWordsList.Add(word);
         guessedSubWords.AddNewWord(word);
-        UpdateWordsRemainUI();
-    }
-
-    void UpdateWordsRemainUI()
-    {
-        if (wordsRemain > 0)
-        {
-            wordsRemainTMP.text = WORDS_REMAIN_STRING + wordsRemain;
-        }
-        else
-        {
-            wordsRemainTMP.text = ALL_WORDS_GUESSED_STRING;
-        }
+        headerPanel.SetWordsRemain(wordsRemain);
     }
 
     public void CheckSubWord()
