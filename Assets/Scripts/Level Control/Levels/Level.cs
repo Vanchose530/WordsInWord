@@ -12,4 +12,10 @@ public class Level
     {
         subwords = new List <string>();
     }
+
+    public Level(string word, List<string> subwords)
+    {
+        this.word = word;
+        this.subwords = subwords;
+    }
 }

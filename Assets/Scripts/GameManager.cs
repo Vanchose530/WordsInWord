@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
         mainWord.BuildNewWord(level.word);
         allSubWords = level.subwords;
         guessedSubWordsList.Clear();
+        guessedSubWords.ClearSubWords();
 
         headerPanel.SetWordsRemain(wordsRemain);
         headerPanel.SetLevel(levelController.currentLevel);

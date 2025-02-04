@@ -5,23 +5,18 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Profiling;
 
-public class LevelDataHandler
+public class LevelHandlerJSON : LevelHandler
 {
-    private string levelDirPath = "";
-    private string levelFileName = ""; // без .json
     const string LEVEL_FILE_FORMAT = ".json";
 
-    public LevelDataHandler(string levelDirPath, string levelFileName)
+    public LevelHandlerJSON(string levelDirPath, string levelFileName) : base(levelDirPath, levelFileName)
     {
-        this.levelDirPath = levelDirPath;
-        this.levelFileName = levelFileName;
-
-        Debug.Log("Created new Level Data Handler with "
+        Debug.Log("Created new Level Handler JSON with "
             + levelDirPath + " level direction path and "
             + levelFileName + " level file name.");
     }
 
-    public Level GetLevel(int levelId)
+    public override Level GetLevel(int levelId)
     {
         string levelFullName = levelFileName + levelId.ToString() + LEVEL_FILE_FORMAT;
         string fullPath = Path.Combine(levelDirPath, levelFullName);
@@ -53,7 +48,7 @@ public class LevelDataHandler
         return loadedLevel;
     }
 
-    public bool IsLevelExists(int levelId)
+    public override bool IsLevelExists(int levelId)
     {
         string levelFullName = levelFileName + levelId.ToString() + LEVEL_FILE_FORMAT;
         string fullPath = Path.Combine(levelDirPath, levelFullName);
@@ -88,17 +83,6 @@ public class LevelDataHandler
                         writer.Write(dataToStore);
                     }
                 }
-
-                //Level verifiedGameData = Load(profileId);
-
-                //if (verifiedGameData != null)
-                //{
-                //    File.Copy(fullPath, backupFilePath, true);
-                //}
-                //else
-                //{
-                //    throw new Exception("Save file could not be verified and backup could not be created.");
-                //}
             }
             catch (Exception e)
             {
