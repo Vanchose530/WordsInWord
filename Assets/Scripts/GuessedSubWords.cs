@@ -14,6 +14,14 @@ public class GuessedSubWords : MonoBehaviour
         gw.word = word;
     }
 
+    public void AddNewWords(string[] words)
+    {
+        foreach (var word in words)
+        {
+            AddNewWord(word);
+        }
+    }
+
     public void ClearSubWords()
     {
         GuessedWord[] words = GetComponentsInChildren<GuessedWord>();

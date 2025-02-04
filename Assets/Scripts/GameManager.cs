@@ -7,10 +7,19 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
-    [Header("Game")]
-    [SerializeField] private string word;
-    [SerializeField] private List<string> allSubWords;
+    private List<string> allSubWords;
     private List<string> guessedSubWordsList;
+
+    private Saver _saver;
+    private Saver saver
+    {
+        get
+        {
+            if (_saver == null)
+                _saver = new Saver();
+            return _saver;
+        }
+    }
 
     [Header("Setup")]
     [SerializeField] private SubWord _subWord;
@@ -29,6 +38,20 @@ public class GameManager : MonoBehaviour
 
     public int wordsRemain { get { return allSubWords.Count - guessedSubWordsList.Count; } }
 
+    private int _starsCount;
+    public int starsCount
+    {
+        get { return _starsCount; }
+        set
+        {
+            headerPanel.SetStarsCount(value);
+            saver.SetStarsCount(value);
+            _starsCount = value;
+        }
+    }
+
+    const int STARS_REWARD = 5;
+
     private void Awake()
     {
         if (instance == null)
@@ -41,6 +64,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        saver.ClearSave();
+
+        starsCount = saver.GetStarsCount();
         SetupLevel(levelController.Concrete(1));
 
         // levelController.levelDataHandler.GenerateLevelTemplate();
@@ -60,8 +86,19 @@ public class GameManager : MonoBehaviour
     {
         mainWord.BuildNewWord(level.word);
         allSubWords = level.subwords;
+
         guessedSubWordsList.Clear();
         guessedSubWords.ClearSubWords();
+
+        var guessedSW = saver.GetGuessedSubWords(level.word);
+        if (guessedSW != null)
+        {
+            foreach (var word in guessedSW)
+            {
+                guessedSubWordsList.Add(word);
+                guessedSubWords.AddNewWord(word);
+            }
+        }
 
         headerPanel.SetWordsRemain(wordsRemain);
         headerPanel.SetLevel(levelController.currentLevel);
@@ -84,6 +121,8 @@ public class GameManager : MonoBehaviour
         {
             // Debug.Log("Верное слово!");
             AddNewGuessedWord(subWord.word);
+            saver.AddGuessedSubWord(mainWord.word, subWord.word);
+            starsCount += STARS_REWARD;
         }
         else
         {

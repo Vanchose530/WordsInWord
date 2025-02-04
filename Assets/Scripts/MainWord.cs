@@ -9,6 +9,8 @@ public class MainWord : MonoBehaviour
 
     private List<LetterButton> letterButtons = new List<LetterButton>();
 
+    public string word { get; private set; }
+
     public void ClearLetterButtons()
     {
         foreach (LetterButton button in letterButtons)
@@ -24,6 +26,7 @@ public class MainWord : MonoBehaviour
         {
             AddLetterButton(letter);
         }
+        this.word = word;
     }
 
     void AddLetterButton(char letter)
@@ -40,5 +43,6 @@ public class MainWord : MonoBehaviour
             Destroy(button.gameObject);
         }
         letterButtons.Clear();
+        this.word = null;
     }
 }
